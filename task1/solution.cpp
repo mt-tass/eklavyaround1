@@ -1,4 +1,3 @@
-//to get a grid of characters that will denote maze and processed further for solution
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
@@ -30,6 +29,7 @@ char getPixelType(const cv::Vec3b &pixel) {
 }
 
 int main() {
+    //Part1://to get a grid of characters that will denote maze and processed further for solution
     string imagePath = "maze.png";
     cv::Mat image = cv::imread(imagePath, cv::IMREAD_COLOR);
 
@@ -49,32 +49,60 @@ int main() {
     double stepX = 16.0; //240/15
     double stepY = 16.0 ;//240/15
 
-    std::cout << "Grid Data (15*15):\n";
-    std::cout << "[\n";
-    for (int i = 0; i < targetHeight; ++i) {
-        std::cout << "    [";
-        for (int j = 0; j < targetWidth; ++j) {
-            // center of chunk of same pixel  to get grid data
-            int original_y = static_cast<int>(i * stepY + stepY / 2.0);
-            int original_x = static_cast<int>(j * stepX + stepX / 2.0);
+    vector<vector<char>> grid_data(targetHeight,vector<char>(targetWidth));
 
-            // checking bounds
+    for (int i = 0; i < targetHeight; ++i) {
+        for (int j = 0; j < targetWidth; ++j) {
+            int original_y = static_cast<int>(i*stepY+ stepY /2.0);
+            int original_x = static_cast<int>(j*stepX +stepX/ 2.0);
             original_y = min(original_y, originalHeight - 1);
+
             original_x = min(original_x, originalWidth - 1);
 
-            cv::Vec3b pixel = image.at<cv::Vec3b>(original_y, original_x);
-            std::cout << "'" << getPixelType(pixel) << "'";
-            if (j < targetWidth - 1) {
-                std::cout << ", ";
+            cv::Vec3b pix = image.at<cv::Vec3b>(original_y, original_x);
+            
+            char pixel = getPixelType(pix);
+
+            grid_data[i][j] = pixel;
+        }
+    }
+    //part2:processing the grid_data
+    string binary = "";
+    //creating the binary string
+    for (int row = 1 ; row<=13 ; row++){
+        if(row%2 != 0){
+            for(int col = 1 ; col<=13;col++){
+                if(grid_data[row][col]=='W'){
+                    binary.push_back('0');
+                }
+                if(grid_data[row][col]=='K'){
+                    binary.push_back('1');
+                }
             }
         }
-        std::cout << "]";
-        if (i < targetHeight - 1) {
-            std::cout << ",";
+        else{
+            for(int col = 13 ; col>=1;col--){
+                if(grid_data[row][col]=='W'){
+                    binary.push_back('0');
+                }
+                if(grid_data[row][col]=='K'){
+                    binary.push_back('1');
+                }
+            }
         }
-        std::cout << "\n";
     }
-    std::cout << "]\n";
-
+    cout << "Binary String : " << binary << endl;
+    string ascii_pass = "";
+    //slicing the string into 8char parts to convert to ascii
+    for (int i = 0; i < binary.length(); i += 8) {
+        string byte_str = binary.substr(i, 8);
+        
+        if (byte_str.length() == 8) {
+            int char_code = stoi(byte_str, nullptr, 2);
+            ascii_pass.push_back(static_cast<char>(char_code));
+        }
+    }
+    //printing the password
+    cout << "Password : " << ascii_pass << endl;
     return 0;
 }
