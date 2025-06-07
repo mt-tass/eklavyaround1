@@ -39,6 +39,7 @@ for row in range(1,14):
             elif cell_type == 'K':
                 binarycode.append('1')
 binarystring = "".join(binarycode)
+#zig zag traversal
 print(f"Collected Binary String (from serpentine traversal): {binarystring}")
 asciipassword = ""
 for i in range(0, len(binarystring), 8):
