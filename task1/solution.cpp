@@ -14,17 +14,17 @@ char getPixelType(const cv::Vec3b &pixel) {
     // assigning pixel the character 
     if (r == 255 && g == 0 && b == 0) { // Red
         return 'R';
-    } else if (r == 0 && g == 255 && b == 0) { // Green
+    } else if (r == 0 && g == 255 && b == 0) { //Green
         return 'G';
-    } else if (r == 0 && g == 0 && b == 255) { // Blue
-        return 'B'; // Assuming 'B' for Blue Checkpoints
-    } else if (r == 0 && g == 0 && b == 0) { // Black
+    } else if (r == 0 && g == 0 && b == 255) { //Blue
+        return 'B';
+    } else if (r == 0 && g == 0 && b == 0) { //Black
         return 'K';
-    } else if (r == 255 && g == 255 && b == 255) { // White
+    } else if (r == 255 && g == 255 && b == 255) { //White
         return 'W';
     } 
     else{
-        return 'X';
+        return 'X';//undefined
     }
 
 }
